@@ -1,3 +1,28 @@
+==============================
+9999-99-99 99:99:99 +0000 HEAD
+==============================
+
+  commit 8340fc33eaa1caecbb815e76ab573e40ffc3191a
+  Author: Daniel Pittman <daniel@rimspace.net>
+  Date:   Sun May 30 17:45:48 2010 +1000
+  
+    Add the ability to exclude modules from ReportVersion::Tiny.
+
+  commit 9c9a1bdd3ccec358c82b3066cbba011b558ccdad
+  Author: Daniel Pittman <daniel@rimspace.net>
+  Date:   Sun May 30 17:40:29 2010 +1000
+  
+    Support skipping the synopsis syntax check.
+
+    Some of my modules don't have Perl code in there, so we may as well skip
+    over it to something that actually will work.
+
+  commit 5ee210f859355c7209a3e97bbdc848cea6e4608e
+  Author: Daniel Pittman <daniel@rimspace.net>
+  Date:   Sun May 30 17:24:13 2010 +1000
+  
+    use ReportVersions::Tiny rather than ReportVersions. 
+
 ======================================
 2010-05-29 02:15:19 +1000 release-1.01
 ======================================

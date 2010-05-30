@@ -12,11 +12,9 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => '(you shouldn\'t) use Dist::Zilla like DANIELP',
   'AUTHOR' => 'Daniel Pittman <daniel@rimspace.net>',
   'BUILD_REQUIRES' => {
-    'Carp' => '0',
     'File::Find' => '0',
     'File::Temp' => '0',
-    'Scalar::Util' => '0',
-    'Test::More' => '0.94'
+    'Test::More' => '0'
   },
   'CONFIGURE_REQUIRES' => {
     'ExtUtils::MakeMaker' => '6.31'
@@ -33,7 +31,7 @@ my %WriteMakefileArgs = (
     'Dist::Zilla::Plugin::HasVersionTests' => '0',
     'Dist::Zilla::Plugin::MinimumVersionTests' => '0',
     'Dist::Zilla::Plugin::PortabilityTests' => '0',
-    'Dist::Zilla::Plugin::ReportVersions' => '0',
+    'Dist::Zilla::Plugin::ReportVersions::Tiny' => '0',
     'Dist::Zilla::Plugin::SynopsisTests' => '0',
     'Dist::Zilla::Plugin::UnusedVarsTests' => '0',
     'Dist::Zilla::PluginBundle::Git' => '0',
@@ -42,7 +40,7 @@ my %WriteMakefileArgs = (
     'namespace::autoclean' => '0',
     'utf8' => '0'
   },
-  'VERSION' => '1.02',
+  'VERSION' => '1.03',
   'test' => {
     'TESTS' => 't/*.t'
   }

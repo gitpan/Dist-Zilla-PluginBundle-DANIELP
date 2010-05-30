@@ -26,7 +26,7 @@
             "Dist::Zilla::Plugin::HasVersionTests" : "0",
             "Dist::Zilla::Plugin::MinimumVersionTests" : "0",
             "Dist::Zilla::Plugin::PortabilityTests" : "0",
-            "Dist::Zilla::Plugin::ReportVersions" : "0",
+            "Dist::Zilla::Plugin::ReportVersions::Tiny" : "0",
             "Dist::Zilla::Plugin::SynopsisTests" : "0",
             "Dist::Zilla::Plugin::UnusedVarsTests" : "0",
             "Dist::Zilla::PluginBundle::Git" : "0",
@@ -39,15 +39,13 @@
       },
       "test" : {
          "requires" : {
-            "Carp" : "0",
             "File::Find" : "0",
             "File::Temp" : "0",
-            "Scalar::Util" : "0",
-            "Test::More" : "0.94"
+            "Test::More" : "0"
          }
       }
    },
-   "version" : "1.02",
+   "version" : "1.03",
    "x_Dist_Zilla" : {
       "plugins" : [
          {
@@ -96,9 +94,9 @@
             "version" : "3.101461"
          },
          {
-            "class" : "Dist::Zilla::Plugin::ReportVersions",
-            "name" : "@DANIELP/ReportVersions",
-            "version" : "1.101460"
+            "class" : "Dist::Zilla::Plugin::ReportVersions::Tiny",
+            "name" : "@DANIELP/ReportVersions::Tiny",
+            "version" : "1.01"
          },
          {
             "class" : "Dist::Zilla::Plugin::CompileTests",

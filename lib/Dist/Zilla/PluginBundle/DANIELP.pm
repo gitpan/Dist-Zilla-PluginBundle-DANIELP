@@ -1,6 +1,6 @@
 package Dist::Zilla::PluginBundle::DANIELP;
 BEGIN {
-  $Dist::Zilla::PluginBundle::DANIELP::VERSION = '1.02';
+  $Dist::Zilla::PluginBundle::DANIELP::VERSION = '1.03';
 }
 use v5.8.1;
 use utf8;
@@ -12,6 +12,8 @@ use Dist::Zilla 2.101040;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
 use Dist::Zilla::PluginBundle::Git;
+
+sub mvp_multivalue_args { qw{skip skip_version} }
 
 has version_regexp => (
     is => 'ro', lazy => 1,
@@ -25,15 +27,31 @@ has version_tag => (
 
 has skip => (
     is => 'ro', isa => 'ArrayRef', lazy => 1,
-    default    => sub { $_[0]->payload->{skip} || [] }
+    default => sub { $_[0]->payload->{skip} || [] }
 );
 
+has skip_version => (
+    is => 'ro', isa => 'ArrayRef', lazy => 1,
+    default => sub { $_[0]->payload->{skip_version} || [] }
+);
+
+
+has 'synopsis_test' => (
+    is => 'ro', isa => 'Bool', lazy => 1,
+    default => sub {
+        my $payload = $_[0]->payload->{synopsis_test};
+        return $payload if defined $payload;
+        return 1;
+    }
+);
 
 sub configure {
     my ($self) = @_;
 
     # Install the long list of plugins I use for getting stuff released.
-    $self->add_plugins(
+    my @plugins;
+
+    push @plugins, (
         # -- distribution version
         [BumpVersionFromGit => {
             first_version   => '1.00',
@@ -59,14 +77,18 @@ sub configure {
         # -- dynamic metadata
 
         # -- tests
-        'ReportVersions',
+        ['ReportVersions::Tiny' => { exclude => $self->skip_version }],
         ['CompileTests' => { fake_home => 1 }],
 
         'HasVersionTests',
         'MetaTests',
         'MinimumVersionTests',
-        'PortabilityTests',
-        'SynopsisTests',
+        'PortabilityTests'
+    );
+
+    $self->synopsis_test && push @plugins, 'SynopsisTests';
+
+    push @plugins, (
         'PodSyntaxTests',
         'UnusedVarsTests',
         'ExtraTests',
@@ -108,6 +130,9 @@ sub configure {
         # REVISIT: Later, we should push somewhere public. :)
         # ['Git::Push' => { push_to => $self->push_to }],
     );
+
+
+    $self->add_plugins(@plugins);
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -123,7 +148,7 @@ Dist::Zilla::PluginBundle::DANIELP - (you shouldn't) use Dist::Zilla like DANIEL
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 DESCRIPTION
 
