@@ -1,8 +1,8 @@
 package Dist::Zilla::PluginBundle::DANIELP;
 BEGIN {
-  $Dist::Zilla::PluginBundle::DANIELP::VERSION = '1.03';
+  $Dist::Zilla::PluginBundle::DANIELP::VERSION = '1.04';
 }
-use v5.8.1;
+use 5.008001;
 use utf8;
 
 use namespace::autoclean;
@@ -53,7 +53,7 @@ sub configure {
 
     push @plugins, (
         # -- distribution version
-        [BumpVersionFromGit => {
+        ['Git::NextVersion' => {
             first_version   => '1.00',
             version_regexp  => $self->version_regexp
         }],
@@ -68,7 +68,7 @@ sub configure {
         'ManifestSkip',
 
         # -- prerequisites
-        [AutoPrereq => { skip => $self->skip }],
+        [AutoPrereqs => { skip => $self->skip }],
 
         # -- rewrite files
         'PkgVersion',
@@ -99,6 +99,7 @@ sub configure {
         'MetaJSON',
         'License',
         'Readme',
+        'ReadmeMarkdownFromPod',
         'MakeMaker',
 
         ['ChangelogFromGit' => {
@@ -148,7 +149,7 @@ Dist::Zilla::PluginBundle::DANIELP - (you shouldn't) use Dist::Zilla like DANIEL
 
 =head1 VERSION
 
-version 1.03
+version 1.04
 
 =head1 DESCRIPTION
 

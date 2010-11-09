@@ -1,18 +1,27 @@
 use strict;
 use warnings;
-use Test::More 'no_plan';  # the safest way to avoid Test::NoWarnings breaking
-                           # our expectations is no_plan, not done_testing!
+use Test::More 0.88;
+# This is a relatively nice way to avoid Test::NoWarnings breaking our
+# expectations by adding extra tests, without using no_plan.  It also helps
+# avoid any other test module that feels introducing random tests, or even
+# test plans, is a nice idea.
+our $success = 0;
+END { $success && done_testing; }
 
 my $v = "\n";
 
 eval {                     # no excuses!
+    # report our Perl details
+    my $want = '5.008001';
     my $pv = ($^V || $]);
-    $v .= "perl: $pv on $^O from $^X\n\n";     # report our Perl details
+    $v .= "perl: $pv (wanted $want) on $^O from $^X\n\n";
 };
+defined($@) and diag("$@");
 
 # Now, our module version dependencies:
 sub pmver {
-    my ($module) = @_;
+    my ($module, $wanted) = @_;
+    $wanted = " (want $wanted)";
     my $pmver;
     eval "require $module;";
     if ($@) {
@@ -36,28 +45,28 @@ sub pmver {
     }
 
     # So, we should be good, right?
-    return sprintf('%-40s => %s%s', $module, $pmver, "\n");
+    return sprintf('%-40s => %-10s%-15s%s', $module, $pmver, $wanted, "\n");
 }
 
-eval { $v .= pmver('Dist::Zilla') };
-eval { $v .= pmver('Dist::Zilla::Plugin::BumpVersionFromGit') };
-eval { $v .= pmver('Dist::Zilla::Plugin::ChangelogFromGit') };
-eval { $v .= pmver('Dist::Zilla::Plugin::CompileTests') };
-eval { $v .= pmver('Dist::Zilla::Plugin::HasVersionTests') };
-eval { $v .= pmver('Dist::Zilla::Plugin::MinimumVersionTests') };
-eval { $v .= pmver('Dist::Zilla::Plugin::PortabilityTests') };
-eval { $v .= pmver('Dist::Zilla::Plugin::ReportVersions::Tiny') };
-eval { $v .= pmver('Dist::Zilla::Plugin::SynopsisTests') };
-eval { $v .= pmver('Dist::Zilla::Plugin::UnusedVarsTests') };
-eval { $v .= pmver('Dist::Zilla::PluginBundle::Git') };
-eval { $v .= pmver('Dist::Zilla::Role::PluginBundle::Easy') };
-eval { $v .= pmver('ExtUtils::MakeMaker') };
-eval { $v .= pmver('File::Find') };
-eval { $v .= pmver('File::Temp') };
-eval { $v .= pmver('Moose') };
-eval { $v .= pmver('namespace::autoclean') };
-eval { $v .= pmver('Test::More') };
-eval { $v .= pmver('utf8') };
+eval { $v .= pmver('Dist::Zilla','2.101040') };
+eval { $v .= pmver('Dist::Zilla::Plugin::ChangelogFromGit','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::CompileTests','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::HasVersionTests','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::MinimumVersionTests','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::PortabilityTests','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::ReadmeMarkdownFromPod','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::ReportVersions::Tiny','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::SynopsisTests','any version') };
+eval { $v .= pmver('Dist::Zilla::Plugin::UnusedVarsTests','any version') };
+eval { $v .= pmver('Dist::Zilla::PluginBundle::Git','1.102810') };
+eval { $v .= pmver('Dist::Zilla::Role::PluginBundle::Easy','any version') };
+eval { $v .= pmver('ExtUtils::MakeMaker','6.31') };
+eval { $v .= pmver('File::Find','any version') };
+eval { $v .= pmver('File::Temp','any version') };
+eval { $v .= pmver('Moose','any version') };
+eval { $v .= pmver('Test::More','0.88') };
+eval { $v .= pmver('namespace::autoclean','any version') };
+eval { $v .= pmver('utf8','any version') };
 
 
 
@@ -66,9 +75,15 @@ $v .= <<'EOT';
 
 Thanks for using my code.  I hope it works for you.
 If not, please try and include this output in the bug report.
+That will help me reproduce the issue and solve you problem.
 
 EOT
 
 diag($v);
 ok(1, "we really didn't test anything, just reporting data");
+$success = 1;
+
+# Work around another nasty module on CPAN. :/
+no warnings 'once';
+$Template::Test::NO_FLUSH = 1;
 exit 0;
